@@ -4,10 +4,49 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="<%= csrfToken %>" />
     <title>Todo Manager</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="css/style.css" />
     <script src="js/script.js"></script>
+    <script>
+    //updating and deleting todo
+    let csrfToken = document
+      .querySelector('meta[name="csrf-token"]')
+      .getAttribute("content");
+    // eslint-disable-next-line no-unused-vars
+    const updateTodo = (id) => {
+      fetch(`/todos/${id}`, {
+        method: "put",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          _csrf: csrfToken,
+        }),
+      })
+        .then((res) => {
+          if (res.ok) {
+            window.location.reload();
+          }
+        })
+        .catch((err) => console.error(err));
+    };
+    // eslint-disable-next-line no-unused-vars
+    const deleteTodo = (id) => {
+      fetch(`/todos/${id}`, {
+        method: "delete",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          _csrf: csrfToken,
+        }),
+      })
+        .then((res) => {
+          if (res.ok) {
+            window.location.reload();
+          }
+        })
+        .catch((err) => console.error(err));
+    };
+  </script>
   </head>
   <body>
     
