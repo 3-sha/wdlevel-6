@@ -17,12 +17,8 @@ describe("Test case for database", () => {
   });
 
   afterAll(async () => {
-    try {
       await db.sequelize.close();
       server.close();
-    } catch (error) {
-      console.log(error);
-    }
   });
 test("Create new todo", async () => {
     const res = await agent.get("/");
