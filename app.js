@@ -1,14 +1,13 @@
 const express = require("express");
 const app = express();
 var csrf = require("tiny-csrf");
-const { Todo } = require("./models");
 const bodyParser = require("body-parser");
 var cookieParser = require("cookie-parser");
 app.use(bodyParser.json());
 const path = require("path");
+const { Todo } = require("./models");
+// eslint-disable-next-line no-unused-vars
 const todo = require("./models/todo");
-
-//app.js
 app.use(express.static(path.join(__dirname , "/public")));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser("shh! some secret string"));
@@ -32,17 +31,19 @@ app.get("/", async (req, res) => {
       csrfToken: request.csrfToken(),
     });
   } else {
-    res.json(overdue, dueLater, dueToday, completedItems);
+    response.json(overdue, dueLater, dueToday, completedItems);
   }
 });
 
 app.get("/todos", async (request, response) => {
+ // defining route to displaying message
+  console.log("Todo list");
   try {
-    const todos = await Todo.findAll({ order: [["id", "ASC"]] });
-    return response.json(todos);
+    const todoslist = await Todo.findAll({ order: [["id", "ASC"]] });
+    return response.json(todoslist);
   } catch (error) {
     console.log(error);
-    return res.status(422).json(error);
+    return response.status(422).json(error);
   }
 });
 app.get("/todos/:id", async function (request, response) {
@@ -55,7 +56,7 @@ app.get("/todos/:id", async function (request, response) {
   }
 });
 app.post("/todos", async (request, response) => {
-  console.log("Body : ", req.body);
+  console.log("Body : ", request.body);
   try {
     await Todo.addTodo({
       title: request.body.title,
@@ -70,8 +71,8 @@ app.post("/todos", async (request, response) => {
 });
 
 app.put("/todos/:id", async (request, response) => {
-  console.log("marks as completed : ", req.params.id);
-  const todo = await Todo.findByPk(req.params.id);
+  console.log("marks as completed : ", request.params.id);
+  const todo = await Todo.findByPk(request.params.id);
   try {
     const updateTodo = await todo.setCompletionStatus(request.body.completed);
     return response.json(updatedTodo);
@@ -89,5 +90,4 @@ app.delete("/todos/:id", async (request, response) => {
     return response.status(422).json(error);
   }
 });
-
 module.exports = app;
