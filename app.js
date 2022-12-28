@@ -12,6 +12,16 @@ const todo = require("./models/todo");
 app.use(express.static(path.join(__dirname , "/public")));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser("shh! some secret string"));
+app.use(
+  session({
+    secret: "my-super-secret-key-21728173615375893",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000,
+    },
+  })
+);
 app.use(csrf("this_should_be_32_charactes_long", ["PUT", "POST", "DELETE"]));
 
 app.set("view engine", "ejs");
