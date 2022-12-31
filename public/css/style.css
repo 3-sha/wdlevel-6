@@ -1,7 +1,6 @@
 body {
-font-family: "Times New Roman", Times, serif;
-color:white;
-background:black;
+font-family: sans-serif;
+background: white;
 }
 
 .Todo-Item:hover .trash-icon{
